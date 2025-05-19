@@ -5,14 +5,31 @@ import './App.css'
 function App() {
 
   // facciamo una variabile che poi andremo ad assegnarla a uno useState dove questa variabile a sua volta conterra i vari input
-  const [formData, setFormData] = useState({
-    name: "",
+
+  // Oggetto con i valori iniziali del form
+  const initialFormData = {
+    nomeCompleto: "",
     username: "",
     password: "",
     specializzazione: "",
-    esperienza:"",
+    anniEsperienza: "",
     descrizione: ""
-  })
+  }
+
+  // Stato per gestire i dati del form
+  const [formData, setFormData] = useState(initialFormData)
+  
+  // Stringhe contenenti i caratteri validi per la password
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\",.<>?/`~";
+  
+
+  
+
+
+
+
 
   //Ora facciamo handleChange
   function handleChange(e) {
@@ -40,7 +57,9 @@ function App() {
       alert("Tutti i campi devono essere Compilati!!!");
       return
 
-    } 
+    }
+    
+    
 
 
     if(Number(formData.esperienza) <= 0 ){
@@ -50,8 +69,10 @@ function App() {
 
 
     console.log("hai complilato tutto il form",formData)
-  }
 
+    
+  }
+  
   
   return (
     <>
@@ -66,6 +87,11 @@ function App() {
             <input type="text" name='name' value={formData.name} onChange={handleChange} />
 
             <input type="text" name='username' value={formData.username} onChange={handleChange} />
+            <strong>
+              {formData.username.includes(letters) || formData.username.includes(numbers) ? "ok" :"errato" && formData.username.length < 6 ? "inserisci almeno 6 caratteri":"apposto"}
+            </strong>
+            
+
             <input type="password" name='password' value={formData.password} onChange={handleChange} />
 
             <select value={formData.specializzazione} onChange={handleChange} name='specializzazione'>
@@ -90,9 +116,24 @@ function App() {
 
 export default App
 
-//     Aggiungi una validazione al submit, verificando che:
-//         Tutti i campi siano compilati
-//         L'input Anni di esperienza sia un numero positivo
-//         La Specializzazione sia selezionata
 
-//     Al submit, se il form è valido, stampa in console i dati.
+
+// 📌 Milestone 2: Validare in tempo reale
+
+//     Aggiungere la validazione in tempo reale dei seguenti campi:
+
+//     ✅ Username: Deve contenere solo caratteri alfanumerici e almeno 6 caratteri (no spazi o simboli).
+
+//     ✅ Password: Deve contenere almeno 8 caratteri, 1 lettera, 1 numero e 1 simbolo.
+
+//     ✅ Descrizione: Deve contenere tra 100 e 1000 caratteri (senza spazi iniziali e finali).
+
+//     Suggerimento: Per semplificare la validazione, puoi definire tre stringhe con i caratteri validi e usare .includes() per controllare se i caratteri appartengono a una di queste categorie:
+
+// const letters = "abcdefghijklmnopqrstuvwxyz";
+
+// const numbers = "0123456789";
+
+// const symbols = "!@#$%^&*()-_=+[]{}|;:'\\",.<>?/`~";
+
+//     Per ciascuno dei campi validati in tempo reale, mostrare un messaggio di errore (rosso) nel caso non siano validi, oppure un messaggio di conferma (verde) nel caso siano validi.

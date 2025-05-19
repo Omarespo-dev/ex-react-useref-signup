@@ -1,41 +1,94 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-body{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
+/* App.css */
 
-header{
-    background-color: black;
-    height: 120px;
-    text-align: center;
-    align-content: center;
-    color: whitesmoke;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-main{
-    min-height: 100vh;
-    background-color: darkgrey;
-    display: flex;
-    justify-content: center;
+header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-main div{
-    display: flex;
-    /* width: 90%; */
-    height: 300px;
-    /* background-color: red; */
-    justify-content: center;
-    
+main > div {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  width: 350px;
 }
 
-main div form{
-    padding: 20px;
+form {
+  display: flex;
+  flex-direction: column;
 }
 
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
 
-main div form input{
-    margin: 10px;
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  padding: 10px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Messaggi di validazione */
+strong {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Colore rosso per errore */
+.errato {
+  color: #d93025; /* rosso */
+}
+
+/* Colore verde per ok */
+.ok {
+  color: #188038; /* verde */
+}
+
+/* Colore arancione per avvisi */
+.warning {
+  color: #f29900; /* arancione */
 }
