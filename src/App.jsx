@@ -8,37 +8,66 @@ function App() {
 
   // Oggetto con i valori iniziali del form
   const initialFormData = {
-    nomeCompleto: "",
+    name: "",
     username: "",
     password: "",
     specializzazione: "",
-    anniEsperienza: "",
+    esperienza: "",
     descrizione: ""
   }
 
-  // Stato per gestire i dati del form
+  // Stato per gestire i dati del form e gli errori
   const [formData, setFormData] = useState(initialFormData)
-  
+  const [errors, setErrors] = useState({})
+
   // Stringhe contenenti i caratteri validi per la password
   const letters = "abcdefghijklmnopqrstuvwxyz";
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\",.<>?/`~";
-  
-
-  
 
 
+  // Funzione di validazione dei campi
+  const validate = (name, value) => {
+    let error = ""
+
+    // Validazione username: minimo 6 caratteri alfanumerici
+    if (name === "username") {
+      const isValid = /^[a-zA-Z0-9]{6,}$/.test(value)
+      if (!isValid) error = "Almeno 6 caratteri alfanumerici, senza spazi o simboli"
+    }
+
+    // Validazione password: minimo 8 caratteri con lettere, numeri e simboli
+    if (name === "password") {
+      const hasLetter = [...value].some(c => letters.includes(c))
+      const hasNumber = [...value].some(c => numbers.includes(c))
+      const hasSymbol = [...value].some(c => symbols.includes(c))
+      if (!(value.length >= 8 && hasLetter && hasNumber && hasSymbol)) {
+        error = "Minimo 8 caratteri, 1 lettera, 1 numero, 1 simbolo"
+      }
+    }
+
+    // Validazione descrizione: tra 100 e 1000 caratteri
+    if (name === "descrizione") {
+      const len = value.trim().length
+      if (len < 100 || len > 1000) error = "Tra 100 e 1000 caratteri"
+    }
+
+    // Aggiorna lo stato degli errori
+    setErrors(prev => ({ ...prev, [name]: error }))
+  }
 
 
 
-  //Ora facciamo handleChange
-  function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
 
-    // console.log("Valore cambiato:", e.target.name, e.target.value);
+  // Gestore del cambiamento dei campi input
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    // Aggiorna lo stato del form
+    setFormData(prev => ({ ...prev, [name]: value }))
+    // Valida i campi specifici
+    if (["username", "password", "descrizione"].includes(name)) {
+      validate(name, value)
+    }
   }
 
   //funzione per onSumbit
@@ -51,29 +80,35 @@ function App() {
       !formData.password.trim() ||
       !formData.specializzazione ||
       !formData.esperienza ||
-      !formData.descrizione.trim()) 
-      {
+      !formData.descrizione.trim()) {
 
       alert("Tutti i campi devono essere Compilati!!!");
       return
 
     }
-    
-    
 
 
-    if(Number(formData.esperienza) <= 0 ){
+
+
+    if (Number(formData.esperienza) <= 0) {
       alert("Gli anni devono essere un numero positivo")
       return
     }
 
 
-    console.log("hai complilato tutto il form",formData)
+    console.log("hai complilato tutto il form", formData)
 
-    
+
   }
-  
-  
+
+  // Funzione per mostrare messaggi di errore o successo
+  const showMessage = (name) => {
+    if (!formData[name]) return null
+    return errors[name]
+      ? <p className="error">{errors[name]}</p>
+      : <p className="success">✅ Valido</p>
+  }
+
   return (
     <>
       {/* 📌 Milestone 1: Creare un Form con Campi Controllati */}
@@ -86,14 +121,18 @@ function App() {
           <form action="submit" onSubmit={handleSubmit}>
             <input type="text" name='name' value={formData.name} onChange={handleChange} />
 
+            {/* Campo Username con validazione */}
             <input type="text" name='username' value={formData.username} onChange={handleChange} />
-            <strong>
+            {showMessage("username")}
+            {/* <strong>
               {formData.username.includes(letters) || formData.username.includes(numbers) ? "ok" :"errato" && formData.username.length < 6 ? "inserisci almeno 6 caratteri":"apposto"}
-            </strong>
-            
+            </strong> */}
 
+            {/* Campo Password con validazione */}
             <input type="password" name='password' value={formData.password} onChange={handleChange} />
+            {showMessage("password")}
 
+            {/* Menu a tendina per la Specializzazione */}
             <select value={formData.specializzazione} onChange={handleChange} name='specializzazione'>
               <option value="">--Seleziona--</option>
               <option value="Full Stack">Full Stack</option>
@@ -101,11 +140,16 @@ function App() {
               <option value="Backend">Backend</option>
             </select>
 
+            {/* Campo numerico per gli anni di esperienza */}
             <input type="number" min="1" name="esperienza" value={formData.esperienza} onChange={handleChange} />
-            
-            <textarea name="descrizione" id="" value={formData.descrizione} onChange={handleChange}>
 
-            </textarea>
+
+            {/* Area di testo per la descrizione con validazione */}
+            <textarea name="descrizione" id="" value={formData.descrizione} onChange={handleChange} />
+
+            {showMessage("descrizione")}
+
+            {/* Pulsante di invio */}
             <button>Invia</button>
           </form>
         </div>
@@ -118,22 +162,3 @@ export default App
 
 
 
-// 📌 Milestone 2: Validare in tempo reale
-
-//     Aggiungere la validazione in tempo reale dei seguenti campi:
-
-//     ✅ Username: Deve contenere solo caratteri alfanumerici e almeno 6 caratteri (no spazi o simboli).
-
-//     ✅ Password: Deve contenere almeno 8 caratteri, 1 lettera, 1 numero e 1 simbolo.
-
-//     ✅ Descrizione: Deve contenere tra 100 e 1000 caratteri (senza spazi iniziali e finali).
-
-//     Suggerimento: Per semplificare la validazione, puoi definire tre stringhe con i caratteri validi e usare .includes() per controllare se i caratteri appartengono a una di queste categorie:
-
-// const letters = "abcdefghijklmnopqrstuvwxyz";
-
-// const numbers = "0123456789";
-
-// const symbols = "!@#$%^&*()-_=+[]{}|;:'\\",.<>?/`~";
-
-//     Per ciascuno dei campi validati in tempo reale, mostrare un messaggio di errore (rosso) nel caso non siano validi, oppure un messaggio di conferma (verde) nel caso siano validi.
