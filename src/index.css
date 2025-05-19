@@ -1,0 +1,41 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+header{
+    background-color: black;
+    height: 120px;
+    text-align: center;
+    align-content: center;
+    color: whitesmoke;
+}
+
+main{
+    min-height: 100vh;
+    background-color: darkgrey;
+    display: flex;
+    justify-content: center;
+}
+
+main div{
+    display: flex;
+    /* width: 90%; */
+    height: 300px;
+    /* background-color: red; */
+    justify-content: center;
+    
+}
+
+main div form{
+    padding: 20px;
+}
+
+
+main div form input{
+    margin: 10px;
+}
