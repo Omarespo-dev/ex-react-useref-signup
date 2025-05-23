@@ -1,20 +1,22 @@
 
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import './App.css'
 
 function App() {
 
   // facciamo una variabile che poi andremo ad assegnarla a uno useState dove questa variabile a sua volta conterra i vari input
-
+  console.log("rendering");
+  
   // Oggetto con i valori iniziali del form
   const initialFormData = {
-    name: "",
     username: "",
     password: "",
-    specializzazione: "",
-    esperienza: "",
-    descrizione: ""
   }
+
+  const inputName= useRef()
+  const inputSpecializzazione = useRef()
+  const inputEsperienza = useRef()
+  const inputDescrizione = useRef()
 
   // Stato per gestire i dati del form e gli errori
   const [formData, setFormData] = useState(initialFormData)
@@ -70,17 +72,19 @@ function App() {
     }
   }
 
+
+
   //funzione per onSumbit
   function handleSubmit(e) {
     e.preventDefault()
 
     if (
-      !formData.name.trim() ||
+      !inputName.current.value.trim() ||
       !formData.username.trim() ||
       !formData.password.trim() ||
-      !formData.specializzazione ||
-      !formData.esperienza ||
-      !formData.descrizione.trim()) {
+      !inputSpecializzazione.current.value ||
+      !inputEsperienza.current.value ||
+      !inputDescrizione.current.value.trim()) {
 
       alert("Tutti i campi devono essere Compilati!!!");
       return
@@ -90,13 +94,19 @@ function App() {
 
 
 
-    if (Number(formData.esperienza) <= 0) {
+    if (Number(inputEsperienza.current.value) <= 0) {
       alert("Gli anni devono essere un numero positivo")
       return
     }
 
 
-    console.log("hai complilato tutto il form", formData)
+    console.log(`hai complilato tutto il form :
+      -Name:${inputName.current.value}
+      -Username:${formData.username}
+      -Passowrd:${formData.password}
+      -Specializzazione:${inputSpecializzazione.current.value}
+      -Esperienza:${inputEsperienza.current.value}
+      -Descrizione:${inputDescrizione.current.value}`)
 
 
   }
@@ -119,7 +129,7 @@ function App() {
       <main>
         <div>
           <form action="submit" onSubmit={handleSubmit}>
-            <input type="text" name='name' value={formData.name} onChange={handleChange} />
+            <input type="text" name='name' ref={inputName} />
 
             {/* Campo Username con validazione */}
             <input type="text" name='username' value={formData.username} onChange={handleChange} />
@@ -133,7 +143,7 @@ function App() {
             {showMessage("password")}
 
             {/* Menu a tendina per la Specializzazione */}
-            <select value={formData.specializzazione} onChange={handleChange} name='specializzazione'>
+            <select  name='specializzazione' ref={inputSpecializzazione}>
               <option value="">--Seleziona--</option>
               <option value="Full Stack">Full Stack</option>
               <option value="Frontend">Frontend</option>
@@ -141,13 +151,13 @@ function App() {
             </select>
 
             {/* Campo numerico per gli anni di esperienza */}
-            <input type="number" min="1" name="esperienza" value={formData.esperienza} onChange={handleChange} />
+            <input type="number" min="1" name="esperienza" ref={inputEsperienza} />
 
 
             {/* Area di testo per la descrizione con validazione */}
-            <textarea name="descrizione" id="" value={formData.descrizione} onChange={handleChange} />
+            <textarea name="descrizione" id="" ref={inputDescrizione} />
 
-            {showMessage("descrizione")}
+            {/* {showMessage("descrizione")} */}
 
             {/* Pulsante di invio */}
             <button>Invia</button>
@@ -162,3 +172,12 @@ export default App
 
 
 
+
+
+// 📌 Milestone 3: Convertire i Campi Non Controllati
+
+// Non tutti i campi del form necessitano di essere aggiornati a ogni carattere digitato. Alcuni di essi non influenzano direttamente l’interfaccia mentre l’utente li compila, quindi è possibile gestirli in modo più efficiente.
+
+//     Analizza il form: Identifica quali campi devono rimanere controllati e quali invece possono essere non controllati senza impattare l’esperienza utente.
+//     Converti i campi non controllati: Usa useRef() per gestirli e recuperare il loro valore solo al momento del submit.
+//     Assicurati che la validazione continui a funzionare: Anche se un campo non è controllato, deve comunque essere validato correttamente quando l’utente invia il form.
